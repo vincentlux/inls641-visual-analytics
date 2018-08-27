@@ -1,0 +1,14 @@
+<html>
+<head>
+	<title>INLS 641 Visual Analytics: Personal Online Portfolio</title>
+</head>
+<body>
+<p>This is my personal portfolio.</p>
+<p><span id="placeholder"></span></p>
+<script>
+var span_element = document.getElementById("placeholder"); // Should match with id above
+var sentences = ["This is my website.", "There are many like it,", " but this one is mine."];
+span_element.innerHTML = sentences[0] + " " + sentences[1] + " " + sentences[2]; // Is the last item on this line misspelled?
+</script>
+</body>
+</html>
