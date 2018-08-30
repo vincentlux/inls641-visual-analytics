@@ -55,7 +55,7 @@ var manning_people = people.filter(function(d) {
 });
 
 console.log("People in manning hall");
-for (var i=0; i<manning_people.length; i++){
+for (var j=0; j<manning_people.length; j++){
 	console.log(manning_people[i]);
 }
 
