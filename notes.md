@@ -1,3 +1,4 @@
+#0828
 ## Ebbinghaus illusion
 ## What is visualization?
     Is the communication of information using graphical representations
@@ -26,6 +27,8 @@
     -Filtering\
     -Mapping\
     -Filtering
+
+#0830
 
 
 
