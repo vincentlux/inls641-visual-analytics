@@ -1,67 +1,113 @@
 function init() {
 	var filename = "handson.js";
-	console.log(filename + " included in this web page.");
+	console.log(filename + " was included in this web page.");
 }
 
 init();
 
 function sayHelloUNC(from_name) {
-	var message = "Hello UNC!";
-	// can also use let instead of var
+	var message = "Hello UNC! Hi from ";
 	console.log(message + from_name);
 }
 
-sayHelloUNC("Vincent");
+sayHelloUNC("David");
+sayHelloUNC("Anne");
 
-
-function printPersonToConsole(person){
-	console.log(person);
+function printPersonToConsole(person) {
+	console.log("The office for " + person.name +
+        " is " + person.room + " " + person.building);
 }
 
-// create an object in js
-var vincent = {};
-vincent.name = "Vincent Lu";
-vincent.title = "student";
-vincent.room = "216";
-vincent.building = "sunstone";
-vincent.email = "xiaopeng@live.unc.edu";
+var gotz = {};
+gotz.name = "David Gotz";
+gotz.title = "Associate Professor";
+gotz.room = 201;
+gotz.building = "Manning Hall";
+gotz.email = "gotz@unc.edu";
 
+//console.log("The office for " + gotz.name +
+//    " is " + gotz.room + " " + gotz.building);
+printPersonToConsole(gotz);
 
-var mostafa  = {
-	name : "Javed Mostafa",
+var mostafa = {
+	name: "Javed Mostafa",
 	title: "Professor",
 	room: 300,
 	building: "Manning Hall",
 	email: "jm@unc.edu"
 };
 
+//console.log("The office for " + mostafa.name +
+//    " is " + mostafa.room + " " + mostafa.building);
 printPersonToConsole(mostafa);
 
-var people = [vincent, mostafa];
-for (var i=0; i<people.length; i++){
-	console.log(people[i]);
+var manocha = {
+	name: "Dinesh Manocha",
+	title: "Professor",
+	room: 250,
+	building: "Brooks Building",
+	email: "dm@cs.unc.edu"
+};
+
+printPersonToConsole(manocha);
+
+var people = [gotz, mostafa, manocha];
+
+console.log("About to iterate over the people array...");
+
+for (var i=0; i<people.length; i++) {
+	printPersonToConsole(people[i]);
 }
 
-// Filter to people only in manning hall
+/*
+This is a
+multi-line comment.
+It can be
+as
+l o n g
+as
+we want.
+ */
+
+// Filter to only people in Manning Hall
 var manning_people = people.filter(function(d) {
-	// if (d.building == "Manning Hall"){
-	//     return true;
-	// }
-	// else {
-	//     return false;
-	// }
+/*    if (d.building == "Manning Hall") {
+        return true;
+    }
+    else {
+        return false;
+    }*/
 	return d.building == "Manning Hall";
-
 });
 
-console.log("People in manning hall");
-for (var j=0; j<manning_people.length; j++){
-	console.log(manning_people[i]);
+console.log("People in Manning Hall:");
+for (var i=0; i<manning_people.length; i++) {
+	printPersonToConsole(manning_people[i]);
 }
 
-// map people objects to next strings.
-var string_people = people.map(function(d) {
-	return d.name + "is in" + d.building; 
+// Map people objects to text strings.
+var string_people = manning_people.map(function(d) {
+	return d.name + " is in " + d.building;
+});
+console.log("People as Strings:");
+for (var i=0; i<string_people.length; i++) {
+	console.log(string_people[i]);
+}
+
+// Map people objects to objects with description strings.
+var string_people = manning_people.map(function(d) {
+	d.description = d.name + " is in " + d.building;
+	return d;
 });
 
-// map people objects to objects with description strings.
+console.log("People using descriptions:");
+for (var i=0; i<string_people.length; i++) {
+	console.log(string_people[i].description);
+}
+
+var my_scale = d3.scaleLinear().domain([0,1]).range([0, 1028]);
+console.log(my_scale(0.5));
+console.log(my_scale(0));
+console.log(my_scale(1));
+
+var min_val = ss.min();

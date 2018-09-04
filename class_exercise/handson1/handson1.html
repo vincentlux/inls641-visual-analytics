@@ -18,10 +18,11 @@ body {
 }
 </style>
 <title>Hands On Day 1</title>
-<script src="handson1.js"></script>
-// Pay attention to the versions!
+
+<!-- pay attention to the version!--> 
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://unpkg.com/simple-statistics@6.0.1/dist/simple-statistics.min.js"></script>
+<script src="handson1.js"></script>
 </head>
 
 <body>
@@ -29,4 +30,31 @@ body {
 <div class="attribution">Frederick Mosteller, Stephen E. Feinberg, and Robert E.R. Rourke, <i>Beginning Statistics with Data Analysis</i>, 1983.</div>
 </body>
 
+<svg width="600" height="400" style="border: 1px solid black;">
+
+	<circle id="bigcircle" cx="0" cy="0" r="50" stroke="lightblue" stroke-width="3" fill="black" onclick="toggleColor()"></circle>
+
+	<circle cx="0" cy="0" r="40" stroke="red" stroke-width="3" fill="black"></circle>
+
+	<circle cx="300" cy="200" r="200" stroke="red" stroke-width="3" fill="black"></circle>
+
+</svg>
+<script>
+	function toggleColor() {
+		// get a reference to the circle that we want to toggle
+		let circle_elem = document.getElementById("bigcircle");
+
+		// change the color back and forth
+		if (circle_elem.clicked != true) {
+			circle_elem.setAttribute("fill","red");
+			circle_elem.clicked = true;
+		}
+		else {
+			circle_elem.setAttribute("fill", "black");
+			circle_elem.clicked = false;
+		}
+	
+		
+	}
+</script>
 </html>

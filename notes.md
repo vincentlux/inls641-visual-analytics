@@ -1,4 +1,4 @@
-#0828
+# 0828
 ## Ebbinghaus illusion
 ## What is visualization?
     Is the communication of information using graphical representations
@@ -28,7 +28,59 @@
     -Mapping\
     -Filtering
 
-#0830
+# 0905
+## SVG and the DOM
+* SVG adds new element types to the DOM
+    * Still elements with attributes
+    * CSS can be used to style 
+
+## D3 and the DOM
+* D3 is largely a DOM manipulation language
+    * Add nodes
+    * Remove nodes
+    * Update nodes
+* D3
+    * Data Driven Document
+
+## Data and graphics
+* Raw data
+    * Is raw data enough?
+* Data types
+    * categorical
+    * ordinal
+        * has a defined order
+        * some is cyclical
+    * Interval data
+    * ratio data
+        * real numbers on a number line that includes a defined zero.
+* Data structures
+    * Entities and Attributes
+        * data is typically organized as entities
+        * entities have attributes
+        * entities have relationships
+            * eg. temporal; spatial
+            * relationships can have attributes and can be directed or not
+    * Data strucute representations
+        * tables are the most common
+        * Network
+            * nodes
+            * edges
+            * project: look back to see where the delay come from?
+        * Trees
+        * Fields
+            * functions with a continuous domain
+* Sementics
+    * What does the data represent?
+    * eg. first group by areas and analyze
+
+## Practicalities: Tables and D3
+* In JS, we can use **Array of objects** to represent a table
+
+## Theory and Practice
+* Theory
+
+* Practice
+    * Always remember what user tasks this system can do
 
 
 
