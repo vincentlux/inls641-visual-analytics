@@ -40,7 +40,7 @@
     * Remove nodes
     * Update nodes
 * D3
-    * Data Driven Document
+    * **D**ata **D**riven **D**ocument
 
 ## Data and graphics
 * Raw data
@@ -80,7 +80,7 @@
 * Theory
 
 * Practice
-    * Always remember what user tasks this system can do
+    * always remember what user tasks this system can do
 
 
 
