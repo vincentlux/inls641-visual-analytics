@@ -133,6 +133,23 @@ class MeetingVis {
 		this.render();
 	}
 
+	clickHandler(d) {
+		var details_div = document.getElementById("details");
+		var details_html = "<b> Meeting ID <b>" + d.id;
+		details_html += "<br><b>Appointment:<b>" + d.appointment;
+		details_html += "<br><b>Start:<b>" + d.start;
+		details_html += "<br><b>End:<b>" + d.end;
+		
+		details_div.innerHTML = details_html;
+
+		// highlight clicked element
+		// first reset
+		d3.selectAll(".selected").classed("selected", false);
+		// then select the current thing
+		var clicked_element =  d3.select(this);
+		clicked_element.classed("selected", true);
+	}
+
 	render() {
 		var thisvis = this;
 
@@ -163,7 +180,24 @@ class MeetingVis {
 			}
 		});
 		// step2: filter
-		// next class
+		var filtered_meeting_data = this.data.filter(function(d) {
+			var wait_time = d.start - d.appointment;
+
+			if (thisvis.show_mode == "all") {
+				return true;
+			}
+			else if (thisvis.show_mode == "no_wait"){
+				return (wait_time <= 0);
+			}
+			else if (thisvis.show_mode == "any_wait"){
+				return (wait_time > 0);
+			}
+			else if (thisvis.show_mode == "majority_wait"){
+				var meet_time = d.end - d.start;
+				return (wait_time > meet_time);
+			}
+		});
+		
 
 		// Get a reference to the SVG element
 		// . means reference classes
@@ -172,26 +206,55 @@ class MeetingVis {
 
 		// Draw the waiting times
 		var wait_marks = svg.selectAll(".wait")
-			.data(this.data);
+			.data(filtered_meeting_data, function(d) {return d.id;}); // correspondence between dates and rectangles
 
 		wait_marks.enter().append("rect")
 			.attr("class","wait")
 			.attr("x", function(d) {return x(d.appointment);})
 			.attr("y", function(d,i) {return y(i);})
 			.attr("height", y(1)-y(0))
-			.attr("width", function(d) {return x(d.start) - x(d.appointment);});
-		
+			.attr("width", function(d) {return x(d.start) - x(d.appointment);})
+			.style("fill-opacity", 0) // first make it transparent
+			.on("click", this.clickHandler) // click and show info
+			.transition().delay(!wait_marks.exit().empty() * 500 + !wait_marks.empty()* 1000).duration(500)
+				.style("fill-opacity", 1); // then fade in 
+
+		wait_marks
+			.transition()
+				.delay(!wait_marks.exit().empty() * 500)
+				.duration(1000)
+			.attr("y", function(d,i) {return y(i);});
+
+		wait_marks.exit() // transparent
+			.transition().duration(500)
+				.style("fill-opacity", 0)
+				.remove();
 
 		// Draw the waiting times
 		var meet_marks = svg.selectAll(".meet")
-			.data(this.data);
+			.data(filtered_meeting_data, function(d) {return d.id});
 
 		meet_marks.enter().append("rect")
 			.attr("class","meet")
 			.attr("x", function(d) {return x(d.start);})
 			.attr("y", function(d,i) {return y(i);})
 			.attr("height", y(1)-y(0))
-			.attr("width", function(d) {return x(d.end) - x(d.start);});
+			.attr("width", function(d) {return x(d.end) - x(d.start);})
+			.style("fill-opacity", 0) // first make it transparent
+			.on("click", this.clickHandler)
+			.transition().delay(!meet_marks.exit().empty() * 500 + !meet_marks.empty() * 1000).duration(500)
+				.style("fill-opacity", 1); // then fade in 
+
+		meet_marks
+			.transition() // how long to transition and when
+				.delay(!meet_marks.exit().empty() * 500)
+				.duration(1000) // 1 s
+			.attr("y", function(d,i) {return y(i);});
+		
+		meet_marks.exit()
+			.transition().duration(500)
+				.style("fill-opacity", 0)
+				.remove();
 
 	}
 }
