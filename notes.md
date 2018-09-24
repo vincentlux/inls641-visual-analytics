@@ -82,5 +82,15 @@
 * Practice
     * always remember what user tasks this system can do
 
-
+## Encoding (Gestalt principles)
+* color
+    * avoid "rainbow" color map
+        * people have different understandings of high and low values
+    * be aware of color blindness
+* orientation
+* Motion
+    * A **change** to any of the other seven properties
+    * Animation is typically used to iterpolate between values
+    * typically associated with either
+    * **use judiciously** since it always draw people's attention
 

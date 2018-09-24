@@ -120,6 +120,23 @@ class MeetingVis {
 		this.data = meeting_data_to_visualize;
 		this.sort_mode = "appointment";
 		this.show_mode = "all";
+
+		this.tool_tip = d3.tip()
+			.attr("class","d3-tip")
+			.offset([-8, 0]) // shift up 8 pixels
+			.html(function(d) {
+				var _html = "";
+
+				var details_html = "<table><tr><th> Meeting ID </th><td>" + d.id + "</td></tr>";
+				details_html += "<table><tr><th>Appointment:</th><td>" + d.appointment + "</td></tr>";
+				details_html += "<table><tr><th>Start:</th><td>" + d.start + "</td></tr>";
+				details_html += "<table><tr><th>End:</th><td>" + d.end + "</td></tr>";
+				
+				return details_html;
+			});
+		// get a reference to svg element	
+		var svg = d3.select("#vis_canvas");
+		this.tool_tip(svg);
 	}
 
 	// callback for changing the sort mode
@@ -135,10 +152,11 @@ class MeetingVis {
 
 	clickHandler(d) {
 		var details_div = document.getElementById("details");
-		var details_html = "<b> Meeting ID <b>" + d.id;
-		details_html += "<br><b>Appointment:<b>" + d.appointment;
-		details_html += "<br><b>Start:<b>" + d.start;
-		details_html += "<br><b>End:<b>" + d.end;
+
+		var details_html = "<table><tr><th> Meeting ID </th><td>" + d.id + "</td></tr>";
+		details_html += "<table><tr><th>Appointment:</th><td>" + d.appointment + "</td></tr>";
+		details_html += "<table><tr><th>Start:</th><td>" + d.start + "</td></tr>";
+		details_html += "<table><tr><th>End:</th><td>" + d.end + "</td></tr>";
 		
 		details_div.innerHTML = details_html;
 
@@ -208,6 +226,7 @@ class MeetingVis {
 		var wait_marks = svg.selectAll(".wait")
 			.data(filtered_meeting_data, function(d) {return d.id;}); // correspondence between dates and rectangles
 
+	
 		wait_marks.enter().append("rect")
 			.attr("class","wait")
 			.attr("x", function(d) {return x(d.appointment);})
@@ -216,6 +235,8 @@ class MeetingVis {
 			.attr("width", function(d) {return x(d.start) - x(d.appointment);})
 			.style("fill-opacity", 0) // first make it transparent
 			.on("click", this.clickHandler) // click and show info
+			.on("mouseover", this.tool_tip.show)
+			.on("mouseout", this.tool_tip.hide)
 			.transition().delay(!wait_marks.exit().empty() * 500 + !wait_marks.empty()* 1000).duration(500)
 				.style("fill-opacity", 1); // then fade in 
 
@@ -230,9 +251,11 @@ class MeetingVis {
 				.style("fill-opacity", 0)
 				.remove();
 
-		// Draw the waiting times
+		// Draw the meeting times
+		console.log(filtered_meeting_data)
 		var meet_marks = svg.selectAll(".meet")
 			.data(filtered_meeting_data, function(d) {return d.id});
+		console.log(meet_marks);
 
 		meet_marks.enter().append("rect")
 			.attr("class","meet")
@@ -242,6 +265,8 @@ class MeetingVis {
 			.attr("width", function(d) {return x(d.end) - x(d.start);})
 			.style("fill-opacity", 0) // first make it transparent
 			.on("click", this.clickHandler)
+			.on("mouseover", this.tool_tip.show)
+			.on("mouseout", this.tool_tip.hide)
 			.transition().delay(!meet_marks.exit().empty() * 500 + !meet_marks.empty() * 1000).duration(500)
 				.style("fill-opacity", 1); // then fade in 
 
