@@ -188,8 +188,16 @@
 				.offset([-8, 0])
 				.html(function(d) {
 					var _html = "";
-					var details_html =  d.state;
-					return  details_html;
+					var details_html_state =  d.state;
+					var details_div = document.getElementById("details");
+					var details_html = d.state +" has a life expectancy of "+d.life_expectancy+" and a poverty rate of "+d.poverty_rate+"%.";
+					details_div.innerHTML = details_html;
+
+					// d3.selectAll(".selected").classed("selected", false);
+					// // then select the current thing
+					// var clicked_element =  d3.select(this);
+					// clicked_element.classed("selected", true);
+					return  details_html_state;
 				})
 			tip(svg);
 
@@ -214,16 +222,6 @@
 				.attr("cx", function(d) {return x(d.poverty_rate);})
 				.attr("cy", function(d) {return y(d.life_expectancy);})
 				.on("mouseover", tip.show)
-				.on("mouseover", function(d) {
-					var details_div = document.getElementById("details");
-					var details_html = "<table><tr><th> test </th><td>" + d.poverty_rate + "</td></tr>";
-					details_div.innerHTML = details_html;
-
-					d3.selectAll(".selected").classed("selected", false);
-					// then select the current thing
-					var clicked_element =  d3.select(this);
-					clicked_element.classed("selected", true);
-				})
 				.on("mouseout", tip.hide)
 				.style("fill-opacity", 0) // first make it transparent
 				.transition().delay(!dot_marks.exit().empty() * 500).duration(1500) 
