@@ -3,6 +3,7 @@
 <title>Assignment #6</title>
 <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
 <script src="http://ils.unc.edu/~gotz/courses/js/gotz-d3-tip.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ils.unc.edu/~gotz/courses/js/d3-tip.css"/>
 
 <style>
 /* Style information for axis labels */
@@ -183,27 +184,28 @@
 		function renderVis(_subset) {
 			// console.log(_subset);
 			// Refer to https://stackoverflow.com/questions/10805184/show-data-on-mouseover-of-circle
-			var tip = d3.tip()
-				.attr('class', 'd3-tip')
-				.offset([-8, 0])
-				.html(function(d) {
-					var _html = "";
-					var details_html_state =  d.state;
-					var details_div = document.getElementById("details");
-					var details_html = d.state +" has a life expectancy of "+d.life_expectancy+" and a poverty rate of "+d.poverty_rate+"%.";
-					details_div.innerHTML = details_html;
-
-					// d3.selectAll(".selected").classed("selected", false);
-					// // then select the current thing
-					// var clicked_element =  d3.select(this);
-					// clicked_element.classed("selected", true);
-					return  details_html_state;
-				})
-			tip(svg);
 
 			
+			// Do not need tooltip
+			// var tip = d3.tip()
+			// 	.attr('class', 'd3-tip')
+			// 	.offset([-8, 0])
+			// 	.html(function(d) {
+			// 		var _html = "";
+			// 		var details_html_state =  d.state;
+			// 		var details_div = document.getElementById("details");
+			// 		var details_html = d.state +" has a life expectancy of "+d.life_expectancy+" and a poverty rate of "+d.poverty_rate+"%.";
+			// 		details_div.innerHTML = details_html;
 
+			// 		// d3.selectAll(".selected").classed("selected", false);
+			// 		// // then select the current thing
+			// 		// var clicked_element =  d3.select(this);
+			// 		// clicked_element.classed("selected", true);
+			// 		return  details_html_state;
+			// 	})
+			// tip(svg);
 
+			// Filter by input
 			var filter_data = data.filter(function(d) {return d.region==_subset; });
 			// console.log(filter_data)
 			// Refer to https://stackoverflow.com/questions/46714759/append-circle-to-map-in-d3
@@ -213,34 +215,37 @@
 			if(_subset=="us"){
 				filter_data = data;
 			}
-			var dot_marks = svg.selectAll("scatter-dots")
-				.data(filter_data);
+			console.log(filter_data);
+			var dot_marks = svg.selectAll(".dots") // .means select class
+				.data(filter_data, function(d) {return d.state;});
 
+			// Make for later text inset use
+			var details_div = document.getElementById("details");
 			dot_marks.enter()
 				.append("circle")
-				.attr("r", 6)
+				.attr("class","dots")
+				.attr("r", 5)
 				.attr("cx", function(d) {return x(d.poverty_rate);})
 				.attr("cy", function(d) {return y(d.life_expectancy);})
-				.on("mouseover", tip.show)
-				.on("mouseout", tip.hide)
+				.on("mouseover", function(d) {
+					var details_html = d.state +" has a life expectancy of "+d.life_expectancy+" and a poverty rate of "+d.poverty_rate+"%.";
+					details_div.innerHTML = details_html;
+				})
+				.on("mouseout", function(d) {
+					details_div.innerHTML = "\u00A0"; // non breaking space
+				})
 				.style("fill-opacity", 0) // first make it transparent
-				.transition().delay(!dot_marks.exit().empty() * 500).duration(1500) 
+				.transition().delay(!dot_marks.exit().empty() * 500).duration(500) 
 				.style("fill",function(d) {return region_color(d.region);})
 				.style("fill-opacity", 1); // then fade in
-				// .style("fill-opacity", 1); // then fade in 
 			
 
 			// Appear and exit
-			console.log(dot_marks);
+			// console.log(dot_marks);
 			dot_marks.exit()
 				.transition().duration(500)
 					.style("fill-opacity", 0)
-				//.style("fill",function(d) {return region_color(d.region);})
 					.remove();
-
-
-
-			// THIS IS WHERE YOU NEED TO ADD YOUR CODE TO COMPLETE THIS ASSIGNMENT!
 		}
 
 		// As the very last step, we make the initial call to renderVis with "us" as the
