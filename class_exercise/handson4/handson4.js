@@ -85,7 +85,7 @@ class PovertyRateVis {
 			.attr("x",0)
 			.attr("y",plot_width)
 			.attr("dy","1.0em")
-			.text(function(d) { return d.key; });
+			.text(function(d) { return d.key; }); // Return the name of the region
 
 		// Now the minimum poverty rate.
 		region_grps.append("text")
