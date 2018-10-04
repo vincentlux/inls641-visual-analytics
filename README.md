@@ -1,3 +1,3 @@
 # inls641-visual-analytics
 
-Place to save assignments for inls641 (Visual analytics).
+D3.js for interactive data analytics.
