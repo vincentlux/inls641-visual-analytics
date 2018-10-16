@@ -58,8 +58,33 @@ var full_data = [
 // Extract the life expectancy and poverty rate values as independent arrays.  We
 // will use these for the Simple Statistics quantiles function when we prepare the
 // training and test set.
-var life_expectancy = full_data.map(function(d) {return d.life_expectancy});
-var poverty_rate = full_data.map(function(d) {return d.poverty_rate});
+var life_expectancy = full_data.map(function(d) {return d.life_expectancy;});
+var poverty_rate = full_data.map(function(d) {return d.poverty_rate;});
+
+// give category to each row so that adding two features to NB
+full_data = full_data.map(function(d) {
+	if (d.poverty_rate <= ss.quantile(poverty_rate, 0.33)) {
+		d.poverty_rate_cat = "Low";
+
+	}
+	else if (d.poverty_rate >= ss.quantile(poverty_rate, 0.67))	{
+		d.poverty_rate_cat = "High";
+	}
+	else{
+		d.poverty_rate_cat = "Medium";
+	}
+	if (d.life_expectancy <= ss.quantile(life_expectancy, 0.33)) {
+		d.life_expectancy_cat = "Low";
+
+	}
+	else if (d.life_expectancy >= ss.quantile(life_expectancy, 0.67))	{
+		d.life_expectancy_cat = "High";
+	}
+	else{
+		d.life_expectancy_cat = "Medium";
+	}
+	return d;
+});
 
 // Define the training set and test sets.  Training will be done on Northeast and South states.
 //
@@ -70,9 +95,9 @@ var test_data = full_data.filter(function(d) {return (d.region!="Northeast") && 
 var classifier = new ss.bayesian();
 training_data.forEach(function(d) {
 	classifier.train({
-		life_expectancy:d.life_expectancy,
-        poverty_rate:d.poverty_rate,
-	}, d.region);
+		life_expectancy_cat:d.life_expectancy_cat,
+        poverty_rate_cat:d.poverty_rate_cat,
+	}, d.region); // d.region is the label
 });
 
 // Use the classifier to label each item in the test set. Because only two regions are
@@ -80,8 +105,8 @@ training_data.forEach(function(d) {
 // by the classifier will contain two values: one for Northeast; one for South.
 test_data.forEach(function(d) {
     var prob_vec = classifier.score({
-        life_expectancy: d.life_expectancy,
-        poverty_rate: d.poverty_rate,
+        life_expectancy_cat: d.life_expectancy_cat,
+        poverty_rate_cat: d.poverty_rate_cat,
     });
 
     if (prob_vec.Northeast > prob_vec.South) {
