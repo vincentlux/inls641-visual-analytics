@@ -63,37 +63,35 @@ var poverty_rate = full_data.map(function(d) {return d.poverty_rate});
 
 // Define the training set and test sets.  Training will be done on Northeast and South states.
 //
-var training_data = full_data.filter(function(d) {return (d.region=="Northeast") || (d.region=="South");});
-var test_data = full_data.filter(function(d) {return (d.region!="Northeast") && (d.region!="South");});
+///////// CODE TO BE ADDED HERE.  Below is temporary, just to let the code work without errors...
+var training_data = full_data;
+var test_data = full_data;
+///////// CODE TO BE ADDED HERE.  Above is temporary, just to let the code work without errors...
+//
+//
+//
+//
+//
 
 // Create the classifier and train it with all items in the training set.
-var classifier = new ss.bayesian();
-training_data.forEach(function(d) {
-	classifier.train({
-		life_expectancy:d.life_expectancy,
-        poverty_rate:d.poverty_rate,
-	}, d.region);
-});
+//
+///////// CODE TO BE ADDED HERE 
+//
+//
+//
+//
+//
 
 // Use the classifier to label each item in the test set. Because only two regions are
 // included in the training set (Northeast and South), the probability vector produced
 // by the classifier will contain two values: one for Northeast; one for South.
-test_data.forEach(function(d) {
-    var prob_vec = classifier.score({
-        life_expectancy: d.life_expectancy,
-        poverty_rate: d.poverty_rate,
-    });
-
-    if (prob_vec.Northeast > prob_vec.South) {
-        d.label = "Northeast";
-    }
-    else if (prob_vec.South > prob_vec.Northeast) {
-        d.label = "South";
-	}
-    else {
-        d.label = "Unknown";
-    }
-});
+//
+///////// CODE TO BE ADDED HERE 
+//
+//
+//
+//
+//
 
 // This variable is used to define size of the visualization canvas and the
 // margin (or "padding") around the scattter plot.  We use the margin to draw
@@ -167,7 +165,7 @@ function initVis() {
 		.style("stroke-width", 1)
 		.style("stroke-opacity", "0.2")
 		.on("mouseover", function(){ document.getElementById("details").innerHTML = this.__data__.state + " has a life expectancy of " + this.__data__.life_expectancy + " and a poverty rate of " + this.__data__.poverty_rate + "%."; })
-		.on("mouseout", function(){ document.getElementById("details").innerHTML = " "; });
+		.on("mouseout", function(){ document.getElementById("details").innerHTML = "&nbsp;"; });
 }
 
 // Next, we define the renderVis callback.  This is used when the page first loads
@@ -197,7 +195,7 @@ function renderVis(_subset) {
 		.attr("cy", function(d) { return y(d.life_expectancy); })
 		.style("fill", function(d) { return region_color(d.label); })
 		.on("mouseover", function(){ document.getElementById("details").innerHTML = this.__data__.state + " has a life expectancy of " + this.__data__.life_expectancy + " and a poverty rate of " + this.__data__.poverty_rate + "%."; })
-		.on("mouseout", function(){ document.getElementById("details").innerHTML = " "; })
+		.on("mouseout", function(){ document.getElementById("details").innerHTML = "&nbsp;"; })
 		.transition()
 			.duration(750)
 			.attr("r",5)
