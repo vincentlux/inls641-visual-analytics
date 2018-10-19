@@ -23,6 +23,13 @@
     font-size: 11px;
 }
 
+.regression {
+    stroke-width: 2px;
+    stroke: black;
+    stroke-dasharray: 10,5;
+    
+}
+
 </style>
 </head>
 <body>
@@ -192,6 +199,7 @@
         // Next, we define the renderVis callback.  This is used when the page first loads
         // to draw data for the entire US.  It is also called whenever the select control
         // is changed (e.g., to show only the South or only the Northeast).
+        var former_points = null;
         function renderVis(_subset) {
             var data_subset = data;
             if (_subset != "United States") {
@@ -205,13 +213,53 @@
             // INLS641: You should add code here.
 
             // compute
-            var point_for_regr = data_subset.map(function(d) {return [d.life_expectancy, d.poverty_rate];});
-            // console.log(data_subset);
-            // console.log(life_expectancy);
-            // console.log(ss.linearRegression(point_for_regr));
+            var point_for_regr = data_subset.map(function(d) {return [x(d.poverty_rate), y(d.life_expectancy)];});
+            // console.log(point_for_regr.sort())
+            // refer to https://beta.observablehq.com/@hydrosquall/simple-linear-regression-scatterplot-with-d3
+            // get a regression line: input lin_regr_line(x), output y
+            lin_regr_line = ss.linearRegressionLine(ss.linearRegression(point_for_regr));
 
+            // create two xy point
+            var all_pov_rate = data_subset.map(function(d) {return d.poverty_rate});
+            all_pov_rate =  all_pov_rate.sort();
+            var first_x = x(0);
+            var last_x = x(30);
+            var x_coordinates = [first_x, last_x];
+            regr_points = x_coordinates.map(function(d) {return {x: d, y: lin_regr_line(d)};});
+            
+            var lines = svg;
+            
+            // idea: move from position of last point to this point
+            if (former_points) {
+                // refer to https://bl.ocks.org/HarryStevens/be559bed98d662f69e68fc8a7e0ad097
+                // refer to  https://bocoup.com/blog/improving-d3-path-animation
+                lines.selectAll(".regression")
+                .transition().attr("transform")
+                .attr("class", "regression")
+                .attr("clip-path", "url(#clip)")
+                .attr("x1", regr_points[0].x)
+                .attr("y1", regr_points[0].y)   
+                .attr("x2", regr_points[1].x)
+                .attr("y2", regr_points[1].y)
+
+            } else{
+                lines.append('line')
+                .attr("class", "regression")
+                .attr("clip-path", "url(#clip)")
+                .attr("x1", regr_points[0].x)
+                .attr("y1", regr_points[0].y)   
+                .attr("x2", regr_points[1].x)
+                .attr("y2", regr_points[1].y)
+
+            }
+
+            // set current point as last point
+            former_points = regr_points;
             
 
+
+
+                
 
 
 
